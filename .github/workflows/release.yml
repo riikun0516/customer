@@ -9,7 +9,6 @@ jobs:
   build:
     strategy:
       matrix:
-        # WindowsとMacの環境を同時に動かします
         os: [windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     
@@ -24,7 +23,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      # OSによって実行するコマンドを切り替えます
       - name: Build Windows
         if: runner.os == 'Windows'
         run: npm run dist:win
@@ -33,12 +31,11 @@ jobs:
         if: runner.os == 'macOS'
         run: npm run dist:mac
 
-      # 生成されたファイルをGitHub Releasesにアップロードします
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           files: |
-            dist/*.exe
-            dist/*.dmg
-            dist/*.pkg
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            dist_build/*.exe
+            dist_build/*.dmg
+            dist_build/*.pkg
