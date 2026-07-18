@@ -20,8 +20,8 @@ function isValidUrl(str) {
 }
 
 function attachNavigationGuards(win, baseUrl) {
-  let baseOrigin = null;
-  try { baseOrigin = new URL(baseUrl).origin; } catch { /* noop */ }
+  let allowedHost = null;
+  try { allowedHost = new URL(baseUrl).hostname; } catch { /* noop */ }
 
   // 新規ウィンドウ（target=_blank等）はシステムのブラウザで開く
   win.webContents.setWindowOpenHandler(({ url }) => {
@@ -29,12 +29,14 @@ function attachNavigationGuards(win, baseUrl) {
     return { action: 'deny' };
   });
 
-  // 設定したWebアプリと異なるドメインへの遷移はシステムのブラウザに委譲する
+  // 設定したWebアプリと異なる「ホスト名」への遷移だけシステムのブラウザに委譲する。
+  // http→https のリダイレクトやポート違いなど、同じサイト内の遷移まで
+  // 誤って外部扱いしないよう、プロトコル/ポートは比較対象に含めない。
   win.webContents.on('will-navigate', (event, url) => {
-    if (!baseOrigin) return;
+    if (!allowedHost) return;
     try {
       const target = new URL(url);
-      if (target.origin !== baseOrigin) {
+      if (target.hostname !== allowedHost) {
         event.preventDefault();
         shell.openExternal(url);
       }
