@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        # WindowsとMacの環境を同時に動かします
+        os: [windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      # OSによって実行するコマンドを切り替えます
+      - name: Build Windows
+        if: runner.os == 'Windows'
+        run: npm run dist:win
+
+      - name: Build Mac
+        if: runner.os == 'macOS'
+        run: npm run dist:mac
+
+      # 生成されたファイルをGitHub Releasesにアップロードします
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*.exe
+            dist/*.dmg
+            dist/*.pkg
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
