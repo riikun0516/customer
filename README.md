@@ -1,75 +1,61 @@
-# 顧客管理ツール - Web本体（PHP + MySQL）
+# 顧客管理ツール - デスクトップランチャー（Electron）
 
-顧客・案件・見積書・請求書・領収書をまとめて管理する社内向け顧客管理ツールのWeb本体です。PHP + MySQLで動作し、共用レンタルサーバー（さくらインターネット、Xserverなど）でもComposer不要でそのまま利用できます。
+[顧客管理ツール Web本体](https://github.com/riikun0516/customer-web.git) を、デスクトップアプリのウィンドウで開くためのシンプルなランチャーです。表示している内容はWeb版と完全に同じで、機能差はありません。Windows / macOS 両対応です。
 
-デスクトップから使うためのランチャー（Electron版）は別リポジトリです。
-👉 https://github.com/riikun0516/customer.git
+## できること
 
-## 主な機能
-
-- **案件管理**: 誰がどの案件を担当しているか、ステータス（未着手/進行中/保留/完了）、金額、期限を一覧表示。進捗メモを時系列で記録
-- **顧客管理**: 顧客情報の登録・編集、紐づく案件の確認
-- **見積書 / 請求書 / 領収書のPDF発行**:
-  - 案件に設定した金額が明細の初期値として自動反映され、工賃や交通費などをその場で追加可能
-  - 請求書には自社情報設定で登録した振込先（銀行口座）を印字
-  - 会社ロゴをアップロードしておくと、PDF上部に自動で印字
-  - 消費税の自動計算、書類番号の自動採番（`INV-2026-0001` 形式）
-- **ユーザー管理・権限**:
-  - 管理者: 全データの閲覧・編集・削除、ユーザー管理、自社情報設定
-  - 一般ユーザー: 案件・顧客の閲覧は全件可能。編集は自分が担当する案件のみ
+- 初回起動時にWeb本体のURLを設定するだけで、以降はそのURLを自動的に開きます
+- メニューの「ファイル > 接続先URLを変更」からいつでも接続先を変更可能
+- ページ内リンクはアプリ内で遷移し、外部サイトへのリンクはシステムのブラウザで開きます
 
 ## 動作要件
 
-- PHP 7.4以上（PHP 8.x 推奨）
-- MySQL 5.7以上 または MySQL 8.x
-- PHP拡張: `pdo_mysql`, `mbstring`（ほとんどの共用ホスティングで標準有効）
-- Composerは不要です（PDF生成ライブラリ [tFPDF](https://github.com/Setasign/tFPDF) と日本語フォント[IPAexゴシック](https://moji.or.jp/ipafont/)を同梱済み）
+- Node.js 18以上を推奨
+- 接続先となる [Web本体](https://github.com/riikun0516/customer-web.git) が別途デプロイ済みであること
 
-## セットアップ手順
+## セットアップ・開発時の起動
 
-1. このリポジトリを公開ディレクトリにクローン（またはZIPをダウンロードしてアップロード）します。
+```bash
+git clone https://github.com/riikun0516/customer.git
+cd customer
+npm install
+npm start
+```
 
-   ```bash
-   git clone https://github.com/riikun0516/customer-web.git
-   ```
+初回起動時に表示される画面で、Web本体のURL（例: `https://your-domain.com/`）を入力してください。
 
-2. レンタルサーバーの管理画面でMySQLデータベースを1つ作成し、接続用のユーザー名・パスワードを控えます。
-3. `config/` ディレクトリと `uploads/` ディレクトリに書き込み権限があることを確認します（`config/config.php` の自動生成、ロゴ画像の保存に使用します）。
-4. ブラウザで `https://your-domain.com/` にアクセスすると初期セットアップ画面が表示されます。
-   - **Step1**: DBホスト・ポート・ユーザー名・パスワード・データベース名を入力 →「接続テストして次へ」（成功すると自動でテーブルを作成します）
-   - **Step2**: 管理者アカウント（ユーザー名・表示名・パスワード）を作成
-5. セットアップ完了後、ログイン画面から利用開始できます。
+## Win / Mac 向けインストーラーの作成
 
-## 既存環境をアップデートする場合
+```bash
+npm install
 
-最新版のファイルを上書きアップロードした後、管理者アカウントでログインし、メニューの **「DBスキーマ更新」** を実行してください。`CREATE TABLE IF NOT EXISTS` / 列の追加のみを行うため、既存のデータが失われることはありません。
+# Windows用（.exe / NSISインストーラー）
+npm run dist:win
 
-## ディレクトリ構成（抜粋）
+# Mac用（.dmg）
+npm run dist:mac
+```
+
+`dist_build/` フォルダに配布用ファイルが生成されます。
+
+- Mac用ビルドはMac環境（またはCI）での実行を推奨します
+- アイコンは未設定のためElectronの既定アイコンになります。差し替える場合は `assets/icon.ico`（Windows）・`assets/icon.icns`（Mac）を追加し、`package.json` の `build.win.icon` / `build.mac.icon` に指定してください
+
+## 接続先SSL証明書について
+
+接続先WebアプリはHTTPS（正規のSSL証明書）での公開を前提としています。自己署名証明書やSSL証明書の設定が不完全な場合、Chromiumベースの本アプリでは `ERR_CERT_AUTHORITY_INVALID` 等のエラーで接続できないことがあります。ブラウザで正常に開けるのにこのアプリだけ開けない場合は、まず接続先サーバー側の証明書チェーン（中間証明書の設定など）をご確認ください。
+
+## ディレクトリ構成
 
 ```
 .
-├── config/               DB接続設定（初期セットアップ時に自動生成）
-├── includes/             共通処理（DB接続・認証・PDFヘルパー・スキーマ定義）
-├── vendor/tfpdf/         PDF生成ライブラリ（tFPDF・日本語フォント同梱）
-├── uploads/logos/        アップロードした会社ロゴの保存先
-├── setup.php             初期セットアップウィザード
-├── migrate.php           既存環境向けDBスキーマ更新（管理者専用）
-├── login.php / logout.php
-├── cases.php / case_form.php           案件一覧・編集
-├── customers.php / customer_form.php   顧客一覧・編集
-├── quotes.php / quote_form.php / quote_pdf.php       見積書
-├── invoices.php / invoice_form.php / invoice_pdf.php 請求書
-├── receipts.php / receipt_form.php / receipt_pdf.php 領収書
-├── users.php / user_form.php           ユーザー管理（管理者専用）
-└── company_settings.php                自社情報・振込先・ロゴ設定（管理者専用）
+├── main.js              メインプロセス（ウィンドウ制御・接続先URL管理）
+├── preload.js            レンダラーへの安全なAPI公開
+├── renderer/
+│   ├── settings.html     接続先URL設定画面
+│   └── settings.js
+└── package.json
 ```
-
-## セキュリティ
-
-- パスワードは `password_hash()` によりハッシュ化して保存
-- 全フォーム送信をCSRFトークンで保護
-- `config/` `includes/` は `.htaccess` により直接アクセスを禁止（Apache環境向け。Nginxの場合は別途アクセス制限が必要です）
-- 本番運用ではHTTPS化を強く推奨します
 
 ## ライセンス
 
