@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>接続先設定</title>
+<style>
+  :root { --primary: #2f6f4f; --primary-dark:#234f38; --border:#e0e0e0; --text-sub:#6b7268; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: "Hiragino Sans", "Yu Gothic", "Meiryo", -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f5f6f4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+  }
+  .card {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 32px;
+    width: 100%;
+    max-width: 440px;
+  }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  p.sub { color: var(--text-sub); font-size: 13px; margin: 0 0 22px; }
+  label { display: block; font-size: 12px; color: var(--text-sub); margin-bottom: 6px; }
+  input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+  .hint { font-size: 12px; color: var(--text-sub); margin-bottom: 18px; }
+  button {
+    width: 100%;
+    padding: 10px 18px;
+    border-radius: 8px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--primary);
+    color: #fff;
+    cursor: pointer;
+  }
+  button:hover { background: var(--primary-dark); }
+  .msg { font-size: 13px; padding: 10px 12px; border-radius: 8px; margin-bottom: 16px; display: none; }
+  .msg.show { display: block; background: #fbe9e7; color: #c0392b; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>接続先の設定</h1>
+    <p class="sub">利用する顧客管理ツール（Webアプリ）のURLを入力してください</p>
+    <div class="msg" id="msg"></div>
+    <label>WebアプリのURL</label>
+    <input type="text" id="url" placeholder="https://example.com/customer-tool/">
+    <div class="hint">例: https://your-domain.com/customer-tool/</div>
+    <button id="btnSave">接続</button>
+  </div>
+<script src="settings.js"></script>
+</body>
+</html>
