@@ -2,6 +2,8 @@ const { app, BrowserWindow, ipcMain, shell, Menu } = require('electron');
 const path = require('path');
 const Store = require('electron-store');
 
+app.setName('COBIS');
+
 const store = new Store({ name: 'launcher-config' });
 
 let mainWindow = null;

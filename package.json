@@ -1,17 +1,17 @@
 {
-  "name": "customer-tool-launcher",
+  "name": "cobis-launcher",
   "version": "1.0.0",
-  "description": "顧客管理ツール（Webアプリ）を開くデスクトップランチャー",
+  "description": "COBIS（Connect Of Business System）を開くデスクトップランチャー",
   "main": "main.js",
   "author": "",
   "license": "UNLICENSED",
   "private": true,
-"scripts": {
-  "start": "electron .",
-  "dist": "electron-builder --publish never",
-  "dist:win": "electron-builder --win --publish never",
-  "dist:mac": "electron-builder --mac --publish never"
-},
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac"
+  },
   "dependencies": {
     "electron-store": "^8.2.0"
   },
@@ -20,8 +20,8 @@
     "electron-builder": "^24.13.3"
   },
   "build": {
-    "appId": "com.example.customer-tool-launcher",
-    "productName": "顧客管理ツール",
+    "appId": "com.example.cobis-launcher",
+    "productName": "COBIS",
     "directories": {
       "output": "dist_build"
     },

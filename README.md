@@ -1,6 +1,6 @@
-# 顧客管理ツール - デスクトップランチャー（Electron）
+# COBIS（Connect Of Business System） - デスクトップランチャー（Electron）
 
-[顧客管理ツール Web本体](https://github.com/riikun0516/customer-web.git) を、デスクトップアプリのウィンドウで開くためのシンプルなランチャーです。表示している内容はWeb版と完全に同じで、機能差はありません。Windows / macOS 両対応です。
+[COBIS Web本体](https://github.com/riikun0516/customer-web.git) を、デスクトップアプリのウィンドウで開くためのシンプルなランチャーです。表示している内容はWeb版と完全に同じで、機能差はありません。Windows / macOS 両対応です。
 
 ## できること
 

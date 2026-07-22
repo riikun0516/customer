@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>接続先設定</title>
+<title>接続先設定 - COBIS</title>
 <style>
   :root { --primary: #2f6f4f; --primary-dark:#234f38; --border:#e0e0e0; --text-sub:#6b7268; }
   * { box-sizing: border-box; }
@@ -53,11 +53,12 @@
 </head>
 <body>
   <div class="card">
+    <p style="font-size:11px; color:var(--text-sub); letter-spacing:0.5px; margin:0 0 2px; font-weight:700;">COBIS</p>
     <h1>接続先の設定</h1>
-    <p class="sub">利用する顧客管理ツール（Webアプリ）のURLを入力してください</p>
+    <p class="sub">利用するCOBIS（Webアプリ）のURLを入力してください</p>
     <div class="msg" id="msg"></div>
-    <label>WebアプリのURL</label>
-    <input type="text" id="url" placeholder="https://example.com/customer-tool/">
+    <label>COBISのURL</label>
+    <input type="text" id="url" placeholder="https://example.com/cobis/">
     <div class="hint">例: https://your-domain.com/customer-tool/</div>
     <button id="btnSave">接続</button>
   </div>
